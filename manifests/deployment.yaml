@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/instance: ruby-gh-test
+    app.kubernetes.io/name: ruby-gh-test
+  name: ruby-gh-test
+  namespace: ruby-gh-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: ruby-gh-test
+      app.kubernetes.io/name: ruby-gh-test
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: ruby-gh-test
+        app.kubernetes.io/name: ruby-gh-test
+    spec:
+      containers:
+      - name: ruby-gh-test
+        image: andreychenkom/ruby-gh-test:latest
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health_check
+            port: http
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        ports:
+        - containerPort: 2000
+          name: http
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health_check
+            port: http
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: 64m
+            memory: 64Mi
+          requests:
+            cpu: 64m
+            memory: 64Mi
+      restartPolicy: Always

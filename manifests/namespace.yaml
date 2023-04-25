@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    app.kubernetes.io/instance: ruby-gh-test
+    app.kubernetes.io/name: ruby-gh-test
+  name: ruby-gh-test
